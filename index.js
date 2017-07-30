@@ -96,17 +96,8 @@ const downloadFile = (url, dir, fileExt, customFileName) => new Promise((resolve
 
 const start = () => {
     
-    //const url = 'https://upload.wikimedia.org/wikipedia/commons/5/54/Adolphe_Millot_oeufs-fixed.jpg'
-    
     const videoId = '6uK6BIVzcxU'
     const url = `http://www.youtube.com/get_video_info?video_id=${videoId}`
-    
-    //downloadFile(url, 'json')
-    //    .then(fileName => readFile(fileName, 'utf8'))
-    //    .then(data => parseVideoInfo(data))
-    //    /* @todo Assuming mp4 here, but really should detect it */
-    //    .then(info => downloadFile(info.video.url, 'mp4', info.title))
-    //    .catch(err => console.error(err))
     
     downloadInMemory(url, 'json')
         .then(data => parseVideoInfo(data))
