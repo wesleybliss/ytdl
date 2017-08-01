@@ -95,19 +95,9 @@ const downloadFile = (url, dir, fileExt, customFileName) => new Promise((resolve
 })
 
 
-const start = () => {
+const __convert_audio_test = () => {
     
     const vidPath = path.resolve(__dirname, 'videos/Tesla Model 3 launch event in 5 minutes.mp4')
-    /*convert(vidPath, {
-        //stderr: line => console.error(line),
-        progress: info => console.info(info.percent, '%')
-    })
-        .then(({ job, audioFileName }) => {
-            try { job.kill() }
-            catch (e) { console.warn(e) }
-            console.info('saved to', audioFileName)
-        })
-        .then(() => { process.exit() })*/
     
     const handleProgress = pct => {
         console.log('...', pct, '%')
@@ -119,10 +109,14 @@ const start = () => {
     
 }
 
-const start_TEMP = () => {
+const start = () => {
     
     const videoId = '6uK6BIVzcxU'
     const url = `http://www.youtube.com/get_video_info?video_id=${videoId}`
+    
+    const handleProgress = pct => {
+        console.log('Converting...', pct + '%')
+    }
     
     downloadInMemory(url, 'json')
         .then(data => parseVideoInfo(data))
@@ -133,6 +127,8 @@ const start_TEMP = () => {
             'mp4',                              // Extension
             info.title                          // Filename
         ))
+        .then(fileName => convert(fileName, handleProgress))
+        .then(audioFileName => console.info('Converted:', audioFileName))
         .catch(err => console.error(err))
     
 }
