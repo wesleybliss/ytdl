@@ -108,7 +108,12 @@ const start = () => {
             console.info('saved to', audioFileName)
         })
         .then(() => { process.exit() })*/
-    convert(vidPath)
+    
+    const handleProgress = pct => {
+        console.log('...', pct, '%')
+    }
+    
+    convert(vidPath, handleProgress)
         .then(foo => console.info('convert:', foo))
         .catch(err => console.error(err))
     

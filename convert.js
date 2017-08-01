@@ -62,7 +62,7 @@ const ffprobe = filePath => new Promise((resolve, reject) => {
     
     proc.on('close', code => {
         
-        console.log(`child process exited with code ${code}`)
+        //console.log(`child process exited with code ${code}`)
         
         let lines = info.split('\n').map(x => x.trim())
         let duration = lines.filter(x => x.includes('duration='))
@@ -82,20 +82,20 @@ const ffprobe = filePath => new Promise((resolve, reject) => {
 const getPercent = (timemark, duration) =>
     (timemarkToSeconds(timemark) / duration) * 100
 
-const _convert = (filePath, duration) => new Promise((resolve, reject) => {
+const _convert = (filePath, duration, onProgress) => new Promise((resolve, reject) => {
     
     const destPath = getFileName(filePath)
     const args = ['-i', filePath, '-q:a', '0', '-map', 'a', destPath]
     
     const exitHandler = (code, signal) => {
-        console.log('child process exited with ' +
-            `code ${code} and signal ${signal}`)
+        /*console.log('child process exited with ' +
+            `code ${code} and signal ${signal}`)*/
         resolve(destPath)
     }
     
     let proc = spawn('ffmpeg', args)
     
-    proc.stdout.on('data', data => console.log(`stdout: ${data}`))
+    //proc.stdout.on('data', data => console.log(`stdout: ${data}`))
     
     proc.stderr.on('data', data => {
         
@@ -105,13 +105,12 @@ const _convert = (filePath, duration) => new Promise((resolve, reject) => {
             data = '' + data
             let timemark = data.split('time=').pop().split(' ').shift().trim()
             progress = getPercent(timemark, duration)
-            console.log('\n\n', timemarkToSeconds(timemark), '/', duration, '\n\n')
         }
         
-        if (progress)
-            console.log('Progress: ', progress)
-        else
-            console.log(`stderr: ${data}`)
+        if (progress && (typeof onProgress === 'function'))
+            onProgress(progress)
+        
+        //console.log(`stderr: ${data}`)
         
     })
 
@@ -121,9 +120,9 @@ const _convert = (filePath, duration) => new Promise((resolve, reject) => {
     
 })
 
-const convert = filePath => {
+const convert = (filePath, onProgress) => {
     return ffprobe(filePath)
-        .then(duration => _convert(filePath, duration))
+        .then(duration => _convert(filePath, duration, onProgress))
 }
 
 
