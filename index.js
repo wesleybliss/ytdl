@@ -98,17 +98,19 @@ const downloadFile = (url, dir, fileExt, customFileName) => new Promise((resolve
 const start = () => {
     
     const vidPath = path.resolve(__dirname, 'videos/Tesla Model 3 launch event in 5 minutes.mp4')
-    convert(vidPath, {
-        /*stderr: line => console.error(line),*/
+    /*convert(vidPath, {
+        //stderr: line => console.error(line),
         progress: info => console.info(info.percent, '%')
     })
-    .then(({ job, audioFileName }) => {
-        try { job.kill() }
-        catch (e) { console.warn(e) }
-        console.info('saved to', audioFileName)
-    })
-    .then(() => { process.exit() })
-    .catch(err => console.error(err))
+        .then(({ job, audioFileName }) => {
+            try { job.kill() }
+            catch (e) { console.warn(e) }
+            console.info('saved to', audioFileName)
+        })
+        .then(() => { process.exit() })*/
+    convert(vidPath)
+        .then(foo => console.info('convert:', foo))
+        .catch(err => console.error(err))
     
 }
 

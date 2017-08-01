@@ -9,6 +9,7 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "ffmpeg": "0.0.4",
     "fluent-ffmpeg": "^2.1.2",
     "mkdirp": "^0.5.1",
     "sanitize-filename": "^1.6.1"
